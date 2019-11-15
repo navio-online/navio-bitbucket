@@ -13,7 +13,7 @@ class Bitbucket():
             return False
 
     def is_pull_request(self):
-        if self.is_bitbucket() and os.environ.get('BITBUCKET_PR_ID', None):
+        if self.is_bitbucket() and os.environ.get('BITBUCKET_PR_ID', None) is not None:
             return True
         else:
             return False

@@ -35,14 +35,14 @@ class Test:
 
         os.environ['CI'] = 'true'
 
-        os.environ['BITBUCKET_PR_ID'] = 'true'
+        os.environ['BITBUCKET_PR_ID'] = '123'
         assert Bitbucket().is_pull_request()
 
-        os.environ['BITBUCKET_PR_ID'] = 'false'
-        assert not Bitbucket().is_pull_request()
+        os.environ['BITBUCKET_PR_ID'] = '456'
+        assert Bitbucket().is_pull_request()
 
         os.environ['BITBUCKET_PR_ID'] = '???'
-        assert not Bitbucket().is_pull_request()
+        assert Bitbucket().is_pull_request()
 
     def test_branch(self):
         from navio.bitbucket import Bitbucket
