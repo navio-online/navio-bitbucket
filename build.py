@@ -78,7 +78,7 @@ def update_version(ver=None):
 
 @task()
 def create_tag():
-    with open('navio/meta_travis.py', 'r') as f:
+    with open('navio/meta_bitbucket.py', 'r') as f:
         file_str = f.read()
     regexp = re.compile(r'__version__\s*\=\s*\"([\d\w\.\-\_]+)\"\s*')
     m = regexp.search(file_str)
