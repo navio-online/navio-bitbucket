@@ -1,8 +1,8 @@
 Changes
 =======
 
-0.1.0 - 20/09/2018
+0.1.0 - 15/11/2019
 ------------------
 
 -  Initial release.
--  Simple Travis envs
+-  Simple Bitbucket envs

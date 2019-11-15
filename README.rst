@@ -19,13 +19,13 @@ Using pip
 
 .. code:: bash
 
-   $ pip install navio-travis
+   $ pip install navio-bitbucket
 
 Using easy_install
 
 .. code:: bash
 
-   $ easy_install navio-travis
+   $ easy_install navio-bitbucket
 
 Example
 -------
@@ -36,10 +36,10 @@ Contributors/Contributing
 -------------------------
 
 If you want to make changes the repo is at
-https://github.com/navio-online/navio-travis. You will need
+https://github.com/navio-online/navio-bitbucket. You will need
 `pytest <http://www.pytest.org>`__ to run the tests and
-`navio-builder <https://github.com/navio-online/navio-travis>`__ tool to
-build modules
+`navio-builder <https://github.com/navio-online/navio-builder>`__ tool
+to build modules
 
 .. code:: bash
 
@@ -50,8 +50,9 @@ request <https://help.github.com/articles/using-pull-requests>`__ once
 you are done.
 
 If you find any bugs or need new features please raise a ticket in the
-`issues section <https://github.com/navio-online/navio-travis/issues>`__
-of the github repo.
+`issues
+section <https://github.com/navio-online/navio-bitbucket/issues>`__ of
+the github repo.
 
 License
 -------
@@ -59,5 +60,5 @@ License
 navio-travis is licensed under a `Apache 2.0
 license <http://www.apache.org/licenses/LICENSE-2.0>`__
 
-.. |Build Status| image:: https://travis-ci.org/navio-online/navio-travis.png?branch=master
-   :target: https://travis-ci.org/navio-online/navio-travis
+.. |Build Status| image:: https://travis-ci.org/navio-online/navio-bitbucket.png?branch=master
+   :target: https://travis-ci.org/navio-online/navio-bitbucket
