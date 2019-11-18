@@ -22,5 +22,9 @@ setup(
     ],
     keywords=['framework'],
     description='Bitbucket Pipelines helper libs',
-    long_description=open('README.rst').read() + '\n' + open('CHANGES.rst').read()
+    long_description="{}\n{}".format(
+        open("README.md", 'rb').read().decode('utf-8'),
+        open("CHANGES.md", 'rb').read().decode('utf-8')
+    ),
+    long_description_content_type='text/markdown'
 )
