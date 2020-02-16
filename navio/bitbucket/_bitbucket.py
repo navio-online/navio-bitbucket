@@ -27,6 +27,9 @@ class Bitbucket():
     def commit_hash(self):
         return os.environ.get('BITBUCKET_COMMIT', '0' * 30)
 
+    def short_commit_hash(self):
+        return os.environ.get('BITBUCKET_COMMIT', '0' * 30)[:8]
+
     def tag(self):
         return os.environ.get('BITBUCKET_TAG', None)
 

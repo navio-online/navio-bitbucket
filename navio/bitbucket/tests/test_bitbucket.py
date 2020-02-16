@@ -71,3 +71,17 @@ class Test:
 
         os.environ['BITBUCKET_COMMIT'] = '04124124bcb131'
         assert '04124124bcb131' == Bitbucket().commit_hash()
+
+    def test_short_commit_hash(self):
+        from navio.bitbucket import Bitbucket
+
+        os.environ['CI'] = 'true'
+        os.environ.pop('BITBUCKET_COMMIT', None)
+
+        assert '00000000' == Bitbucket().commit_hash()
+
+        os.environ['BITBUCKET_COMMIT'] = '1f510ab451bb4'
+        assert '1f510ab4' == Bitbucket().commit_hash()
+
+        os.environ['BITBUCKET_COMMIT'] = '04124124bcb131'
+        assert '04124124' == Bitbucket().commit_hash()
