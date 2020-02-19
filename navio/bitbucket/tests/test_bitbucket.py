@@ -78,10 +78,10 @@ class Test:
         os.environ['CI'] = 'true'
         os.environ.pop('BITBUCKET_COMMIT', None)
 
-        assert '00000000' == Bitbucket().short_commit_hash()
+        assert '0000000' == Bitbucket().short_commit_hash()
 
         os.environ['BITBUCKET_COMMIT'] = '1f510ab451bb4'
-        assert '1f510ab4' == Bitbucket().short_commit_hash()
+        assert '1f510ab' == Bitbucket().short_commit_hash()
 
         os.environ['BITBUCKET_COMMIT'] = '04124124bcb131'
-        assert '04124124' == Bitbucket().short_commit_hash()
+        assert '0412412' == Bitbucket().short_commit_hash()
