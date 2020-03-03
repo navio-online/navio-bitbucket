@@ -55,9 +55,9 @@ class Bitbucket():
             number = number - 1
             prep = self._api_get('/pipelines/{number}'.format(number=number))
             r = s.send(prep).json()
-            if r['target']['ref_type'] == 'branch' and
-            r['target']['ref_name'] == branch and
-            r['state']['name'] == 'IN_PROGRESS':
+            if (r['target']['ref_type'] == 'branch' and
+                    r['target']['ref_name'] == branch and
+                    r['state']['name'] == 'IN_PROGRESS'):
                 return number
 
         return None
@@ -72,9 +72,9 @@ class Bitbucket():
                 return None
 
             r = resp.json()
-            if r['target']['ref_type'] == 'branch' and
-            r['target']['ref_name'] == branch and
-            r['state']['name'] == 'IN_PROGRESS':
+            if (r['target']['ref_type'] == 'branch' and
+                    r['target']['ref_name'] == branch and
+                    r['state']['name'] == 'IN_PROGRESS'):
                 return number
 
     def stop_pipeline(self, number):
