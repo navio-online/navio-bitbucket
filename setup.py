@@ -7,7 +7,7 @@ setup(
     author_email='oss@navio.online',
     url=navio.meta_bitbucket.__website__,
     packages=['navio', 'navio.bitbucket'],
-    install_requires=[],
+    install_requires=['requests'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     license='Apache 2.0 license',

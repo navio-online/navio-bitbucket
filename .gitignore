@@ -13,3 +13,5 @@ append_creds.sh
 .cache
 .pytest_cache
 .eggs
+test.py
+test.sh
