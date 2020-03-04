@@ -1,8 +1,7 @@
 import os
 from requests.auth import HTTPBasicAuth
-from requests import Request, Session
-from datetime import datetime, timedelta
 import requests
+from datetime import datetime, timedelta
 
 
 class Bitbucket():
@@ -50,20 +49,19 @@ class Bitbucket():
         return os.environ.get('BITBUCKET_CLONE_DIR', '/dev/null')
 
     def find_pipeline_down(self, branch, number):
-        s = Session()
         page = 0
         created_on_not_later = datetime.utcnow() - timedelta(hours=1)
         created_on_not_later = created_on_not_later.strftime('%Y-%m-%dT%H:%M:%S.000Z')
         result = list()
         while True:
             page = page + 1
-            prep = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
-            r = s.send(prep).json()
-            if r['pagelen'] == 0:
+            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
+
+            if resp['pagelen'] == 0:
                 print('No more results returned form API')
                 return result
 
-            for val in r['values']:
+            for val in resp['values']:
                 if val['created_on'] < created_on_not_later:
                     print('Stopping on (1 hour diff): {}: {}'.format(val['build_number'], val['created_on']))
                     return result
@@ -75,24 +73,22 @@ class Bitbucket():
                         val['target']['ref_name'] == branch and
                         val['state']['name'] == 'IN_PROGRESS'):
                     print('Adding to results {}: {}'.format(val['build_number'], val['created_on']))
-                    # result.append(val['links']['self']['href'])
                     result.append(val['build_number'])
 
         return None
 
     def find_pipeline_up(self, branch, number):
-        s = Session()
         page = 0
         result = list()
         while True:
             page = page + 1
-            prep = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
-            r = s.send(prep).json()
-            if r['pagelen'] == 0:
+            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
+
+            if resp['pagelen'] == 0:
                 print('No more results returned form API')
                 return result
 
-            for val in r['values']:
+            for val in resp['values']:
                 if val['build_number'] < number:
                     print('Stopping on (number lower): {}: {}'.format(val['build_number'], val['created_on']))
                     return result
@@ -101,38 +97,48 @@ class Bitbucket():
                         val['target']['ref_name'] == branch and
                         val['state']['name'] == 'IN_PROGRESS'):
                     print('Adding to results {}: {}'.format(val['build_number'], val['created_on']))
-                    # result.append(val['links']['self']['href'])
                     result.append(val['build_number'])
 
         return None
 
     def stop_pipeline(self, number):
-        s = Session()
-        prep = self._api_post('/pipelines/{number}/stopPipeline'.format(number=number))
-        resp = s.send(prep)
+        resp = self._api_post('/pipelines/{number}/stopPipeline'.format(number=number))
+
         if resp.status_code != 204:
             raise Exception("Wasn't able to stop pipeline {}: {}: {}".format(number, r.status_code, r.content))
 
     def _api_post(self, url):
         if not url.startswith('/'):
             url = '/' + url
-        return Request('POST', 'https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
+
+        resp = requests.post('https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
             team=os.environ.get('BITBUCKET_WORKSPACE'),
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
-            # headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
-            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
-        ).prepare()
+            headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
+            # auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+        )
+
+        if resp.status_code >= 400:
+            resp.raise_for_status()
+
+        return resp.json()
 
     def _api_get(self, url):
         if not url.startswith('/'):
             url = '/' + url
-        return Request('GET', 'https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
+
+        resp = requests.get('https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
             team=os.environ.get('BITBUCKET_WORKSPACE'),
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
-            # headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
-            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
-        ).prepare()
+            headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
+            # auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+        )
+
+        if resp.status_code >= 400:
+            resp.raise_for_status()
+
+        return resp.json()
