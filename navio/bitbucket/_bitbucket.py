@@ -58,7 +58,7 @@ class Bitbucket():
         result = list()
         while True:
             page = page + 1
-            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
+            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page)).json()
 
             if resp['pagelen'] == 0:
                 print('No more results returned form API')
@@ -85,7 +85,7 @@ class Bitbucket():
         result = list()
         while True:
             page = page + 1
-            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page))
+            resp = self._api_get('/pipelines/?sort=-created_on&page={page}'.format(page=page)).json()
 
             if resp['pagelen'] == 0:
                 print('No more results returned form API')
@@ -126,7 +126,7 @@ class Bitbucket():
         if resp.status_code >= 400:
             resp.raise_for_status()
 
-        return resp.json()
+        return resp
 
     def _api_get(self, url):
         if not url.startswith('/'):
@@ -144,4 +144,4 @@ class Bitbucket():
         if resp.status_code >= 400:
             resp.raise_for_status()
 
-        return resp.json()
+        return resp
