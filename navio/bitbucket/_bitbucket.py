@@ -116,6 +116,7 @@ class Bitbucket():
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
+            headers={'Content-Type': 'application/json'},
             auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
 
@@ -133,6 +134,7 @@ class Bitbucket():
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
+            headers={'Content-Type': 'application/json'},
             auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
 
