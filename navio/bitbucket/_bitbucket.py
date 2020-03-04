@@ -116,8 +116,7 @@ class Bitbucket():
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
-            headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
-            # auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
 
         if resp.status_code >= 400:
@@ -134,8 +133,7 @@ class Bitbucket():
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
         ),
-            headers={'Authorization': 'JWT {jwt_token}'.format(jwt_token=os.environ.get('PIPELINES_JWT_TOKEN'))},
-            # auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
 
         if resp.status_code >= 400:
