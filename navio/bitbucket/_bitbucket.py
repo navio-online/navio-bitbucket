@@ -48,6 +48,9 @@ class Bitbucket():
     def build_dir(self):
         return os.environ.get('BITBUCKET_CLONE_DIR', '/dev/null')
 
+    def build_number(self):
+        return os.environ.get('BITBUCKET_BUILD_NUMBER', 0)
+
     def find_pipeline_down(self, branch, number):
         page = 0
         created_on_not_later = datetime.utcnow() - timedelta(hours=1)
