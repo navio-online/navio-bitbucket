@@ -68,7 +68,7 @@ class Bitbucket():
                 if val['created_on'] < created_on_not_later:
                     print('Stopping on (1 hour diff): {}: {}'.format(val['build_number'], val['created_on']))
                     return result
-                if val['build_number'] > int(number):
+                if val['build_number'] >= int(number):
                     print('Skipping (number higher): {}: {}'.format(val['build_number'], val['created_on']))
                     continue
 
@@ -92,7 +92,7 @@ class Bitbucket():
                 return result
 
             for val in resp['values']:
-                if val['build_number'] < int(number):
+                if val['build_number'] <= int(number):
                     print('Stopping on (number lower): {}: {}'.format(val['build_number'], val['created_on']))
                     return result
 
