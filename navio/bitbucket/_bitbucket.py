@@ -124,7 +124,7 @@ class Bitbucket():
                 return result
 
             for val in resp['values']:
-                if (val['type'] == 'pipeline_variable' and 
+                if (val['type'] == 'pipeline_variable' and
                         val['key'] == key):
                     result = val
                     print('Varible for name {key} found under uuid {uuid}'.format(key=key, uuid=val['uuid']))
@@ -154,7 +154,6 @@ class Bitbucket():
                 result = resp.json()
 
         return result
-
 
     def _api_post(self, url, data=None):
         if not url.startswith('/'):
