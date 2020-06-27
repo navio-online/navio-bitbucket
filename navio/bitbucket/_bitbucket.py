@@ -266,6 +266,7 @@ class Bitbucket():
         if not url.startswith('/'):
             url = '/' + url
 
+        print('>>> Running get to {}'.format(url))
         resp = requests.get('https://api.bitbucket.org/internal/repositories/{team}/{repo_name}{url}'.format(
             team=os.environ.get('BITBUCKET_WORKSPACE'),
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
@@ -274,7 +275,7 @@ class Bitbucket():
             headers={'Content-Type': 'application/json'},
             auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
-
+        print('>>> Response for get {}: {}'.format(url, resp.status_code))
         if resp.status_code >= 400:
             raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
 
@@ -284,6 +285,7 @@ class Bitbucket():
         if not url.startswith('/'):
             url = '/' + url
 
+        print('>>> Running delete to {}'.format(url))
         resp = requests.delete('https://api.bitbucket.org/internal/repositories/{team}/{repo_name}{url}'.format(
             team=os.environ.get('BITBUCKET_WORKSPACE'),
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
@@ -292,7 +294,7 @@ class Bitbucket():
             headers={'Content-Type': 'application/json'},
             auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
         )
-
+        print('>>> Response for delete {}: {}'.format(url, resp.status_code))
         if resp.status_code >= 400:
             raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
 
