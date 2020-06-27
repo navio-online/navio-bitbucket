@@ -175,6 +175,25 @@ class Bitbucket():
 
         return result
 
+    def find_cache_by_prefix(self, prefix):
+        page = 0
+        result = list()
+
+        while True:
+            page = page + 1
+            resp = self._internal_get('/pipelines_caches/?page={page}'.format(page=page)).json()
+
+            if resp['pagelen'] == 0:
+                print('No more results returned form API')
+                return result
+
+            for val in resp['values']:
+                if val['name'].startswith(prefix):
+                    result.append(val)
+                    print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
+
+        return result
+
     def delete_cache(self, name):
         cache = self.get_cache(name)
         self._internal_delete('/pipelines_caches/{uuid}'.format(uuid=cache['uuid']))
