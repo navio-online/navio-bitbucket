@@ -184,7 +184,7 @@ class Bitbucket():
             for prefix in prefixes:
                 if val['name'].startswith(prefix):
                     result.append(val)
-                    print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
+                    print('Cache for prefix \'{prefix}\' found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
 
         return result
 
