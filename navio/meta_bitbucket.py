@@ -1,4 +1,4 @@
-__version__ = "0.1.19"
+__version__ = "0.1.20"
 __license__ = "Apache 2.0 license"
 __website__ = "https://oss.navio.online/navio-bitbucket/"
 __download_url__ = ('https://github.com/navio-online/navio-bitbucket/archive'
