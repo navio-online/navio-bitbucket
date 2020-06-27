@@ -176,22 +176,15 @@ class Bitbucket():
         return result
 
     def find_cache_by_prefix(self, *prefixes):
-        page = 0
         result = list()
 
-        while True:
-            page = page + 1
-            resp = self._internal_get('/pipelines_caches/?page={page}'.format(page=page)).json()
+        resp = self._internal_get('/pipelines_caches/').json()
 
-            if resp['pagelen'] == 0:
-                print('No more results returned form API')
-                return result
-
-            for val in resp['values']:
-                for prefix in prefixes:
-                    if val['name'].startswith(prefix):
-                        result.append(val)
-                        print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
+        for val in resp['values']:
+            for prefix in prefixes:
+                if val['name'].startswith(prefix):
+                    result.append(val)
+                    print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
 
         return result
 
