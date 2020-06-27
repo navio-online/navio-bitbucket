@@ -175,7 +175,7 @@ class Bitbucket():
 
         return result
 
-    def find_cache_by_prefix(self, prefix):
+    def find_cache_by_prefix(self, *prefixes):
         page = 0
         result = list()
 
@@ -188,9 +188,10 @@ class Bitbucket():
                 return result
 
             for val in resp['values']:
-                if val['name'].startswith(prefix):
-                    result.append(val)
-                    print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
+                for prefix in prefixes:
+                    if val['name'].startswith(prefix):
+                        result.append(val)
+                        print('Cache for prefix {prefix} found under uuid {uuid}'.format(prefix=prefix, uuid=val['uuid']))
 
         return result
 
