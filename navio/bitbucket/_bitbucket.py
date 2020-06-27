@@ -155,6 +155,31 @@ class Bitbucket():
 
         return result
 
+    def get_cache(self, name):
+        page = 0
+        result = None
+
+        while True:
+            page = page + 1
+            resp = self._internal_get('/pipelines_caches/?page={page}'.format(page=page)).json()
+
+            if resp['pagelen'] == 0:
+                print('No more results returned form API')
+                return result
+
+            for val in resp['values']:
+                if (val['name'] == name):
+                    result = val
+                    print('Cache for name {name} found under uuid {uuid}'.format(name=name, uuid=val['uuid']))
+                    return result
+
+        return result
+
+    def delete_cache(self, name):
+        cache = self.get_cache(name)
+        self._internal_delete('/pipelines_caches/{uuid}'.format(uuid=cache['uuid']))
+        print('Cache with name {name} and uuid {uuid} deleted'.format(name=name, uuid=val['uuid']))
+
     def _api_post(self, url, data=None):
         if not url.startswith('/'):
             url = '/' + url
@@ -198,6 +223,42 @@ class Bitbucket():
             url = '/' + url
 
         resp = requests.get('https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
+            team=os.environ.get('BITBUCKET_WORKSPACE'),
+            repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
+            url=url
+        ),
+            headers={'Content-Type': 'application/json'},
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+        )
+
+        if resp.status_code >= 400:
+            raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
+
+        return resp
+
+    def _internal_get(self, url):
+        if not url.startswith('/'):
+            url = '/' + url
+
+        resp = requests.get('https://api.bitbucket.org/internal/repositories/{team}/{repo_name}{url}'.format(
+            team=os.environ.get('BITBUCKET_WORKSPACE'),
+            repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
+            url=url
+        ),
+            headers={'Content-Type': 'application/json'},
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+        )
+
+        if resp.status_code >= 400:
+            raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
+
+        return resp
+
+    def _internal_delete(self, url):
+        if not url.startswith('/'):
+            url = '/' + url
+
+        resp = requests.delete('https://api.bitbucket.org/internal/repositories/{team}/{repo_name}{url}'.format(
             team=os.environ.get('BITBUCKET_WORKSPACE'),
             repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
             url=url
