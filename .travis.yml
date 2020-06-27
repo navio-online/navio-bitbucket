@@ -3,9 +3,9 @@ sudo: true
 language: python
 python:
 - '2.7'
-- '3.5'
 - '3.6'
 - '3.7'
+- '3.8'
 env:
   global:
   - secure: vwPkmKM6XQu1jTVA33kJ025ccQuBhK91eORRF2RpoAI5pY1AHqwkUcaunhwLntt0zP1bFiq72U42BDd6E9haHrJO1298ZxzVDfE18HhR+0f4HtOpBoVMBYGX5cq3iYad5aGLmhTmM8saxLv4OwXihCdf5n+o5jbVj32ZlreGL1MDVwSQs4zo8LuiqaTkdvBjk3woYFhEkJ5VP59WN2SIRHFyG66094v0gN3ZbeS3I0S8NAksPPSK6HRGTjLHf1a7HhCIjqAjkAX4/NMyLLURuuWdgsdoRfUpiXpsCV4QWGUFfB4i6mWU7P8mQMEYmyutawVZIOTXke2hHjYBPsYlRjMtWS8p0sIgkjxHGL/hAL1aVhCK/n48d118zPJQr3VbdbjvJ3zrdv9gc/sp79Sg0Fz8rKPNrbxtcqadLw2NHnUAJBO/mvUcoxxta2k/ZdUbx/eEv+WJR1mokPo33WWA7krMzzYUtuEwsM4JnGt8IbZLefYeSkmCscp1Xjkgwqi58RcM9wZsVZRrDqCRRkbZMXGGuS864OHo921aepmTCpie2lnmDPbGAVK+b18NbjLsk7MUKFooQoXhJ7tes/YX9iduDgjtXHI6hPpZjLI2utCwlnea0ijKLjf0qwI55gH+YaHZUim17DAjOiMegNVQJP+ywRp6gAiz+pnCU8P7SXQ=
