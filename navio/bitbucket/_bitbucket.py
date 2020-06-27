@@ -2,6 +2,7 @@ import os
 from requests.auth import HTTPBasicAuth
 import requests
 from datetime import datetime, timedelta
+import uuid
 
 
 class Bitbucket():
@@ -110,7 +111,52 @@ class Bitbucket():
         if resp.status_code != 204:
             raise Exception("Wasn't able to stop pipeline {}: {}: {}".format(number, r.status_code, r.content))
 
-    def _api_post(self, url):
+    def get_variable(self, key):
+        page = 0
+        result = None
+
+        while True:
+            page = page + 1
+            resp = self._api_get('/pipelines_config/variables/?page={page}'.format(page=page)).json()
+
+            if resp['pagelen'] == 0:
+                print('No more results returned form API')
+                return result
+
+            for val in resp['values']:
+                if (val['type'] == 'pipeline_variable' and 
+                        val['key'] == key):
+                    result = val
+                    print('Varible for name {key} found under uuid {uuid}'.format(key=key, uuid=val['uuid']))
+                    return result
+
+        return None
+
+    def save_variable(self, key, value, secured=False):
+        page = 0
+        result = None
+
+        existing_var = self.get_variable(key)
+        if existing_var:
+            existing_var['value'] = value
+            resp = self._api_put('/pipelines_config/variables/{uuid}'.format(uuid=existing_var['uuid']), existing_var)
+            if resp:
+                result = resp.json()
+        else:
+            new_variable = {
+                'uuid': '{{{uuid}}}'.format(uuid=uuid.uuid4().hex),
+                'key': key,
+                'value': value,
+                'secured': secured,
+            }
+            resp = self._api_post('/pipelines_config/variables/', new_variable)
+            if resp:
+                result = resp.json()
+
+        return result
+
+
+    def _api_post(self, url, data=None):
         if not url.startswith('/'):
             url = '/' + url
 
@@ -120,11 +166,31 @@ class Bitbucket():
             url=url
         ),
             headers={'Content-Type': 'application/json'},
-            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD'))
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD')),
+            json=data
         )
 
         if resp.status_code >= 400:
-            resp.raise_for_status()
+            raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
+
+        return resp
+
+    def _api_put(self, url, data=None):
+        if not url.startswith('/'):
+            url = '/' + url
+
+        resp = requests.put('https://api.bitbucket.org/2.0/repositories/{team}/{repo_name}{url}'.format(
+            team=os.environ.get('BITBUCKET_WORKSPACE'),
+            repo_name=os.environ.get('BITBUCKET_REPO_SLUG'),
+            url=url
+        ),
+            headers={'Content-Type': 'application/json'},
+            auth=HTTPBasicAuth(os.environ.get('BITBUCKET_USERNAME'), os.environ.get('BITBUCKET_PASSWORD')),
+            json=data
+        )
+
+        if resp.status_code >= 400:
+            raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
 
         return resp
 
@@ -142,6 +208,6 @@ class Bitbucket():
         )
 
         if resp.status_code >= 400:
-            resp.raise_for_status()
+            raise Exception('Response error: code={code}, message={message}'.format(code=resp.status_code, message=resp.content))
 
         return resp
