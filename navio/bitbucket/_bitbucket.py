@@ -43,6 +43,12 @@ class Bitbucket():
         else:
             return False
 
+    def is_branch(self):
+        if os.environ.get('BITBUCKET_BRANCH', False):
+            return True
+        else:
+            return False
+
     def home_dir(self):
         return os.environ.get('HOME', '/dev/null')
 
