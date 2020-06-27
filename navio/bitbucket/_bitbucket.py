@@ -127,7 +127,7 @@ class Bitbucket():
                 if (val['type'] == 'pipeline_variable' and
                         val['key'] == key):
                     result = val
-                    print('Varible for name {key} found under uuid {uuid}'.format(key=key, uuid=val['uuid']))
+                    print('Variable for name {key} found under uuid {uuid}'.format(key=key, uuid=val['uuid']))
                     return result
 
         return None
@@ -195,10 +195,16 @@ class Bitbucket():
 
         return result
 
-    def delete_cache(self, name):
-        cache = self.get_cache(name)
-        self._internal_delete('/pipelines_caches/{uuid}'.format(uuid=cache['uuid']))
-        print('Cache with name {name} and uuid {uuid} deleted'.format(name=name, uuid=val['uuid']))
+    def delete_cache(self, **kwargs):
+        if 'name' in kwargs:
+            cache_name = kwargs.get('name')
+            cache = self.get_cache(cache_name)
+            self._internal_delete('/pipelines_caches/{uuid}'.format(uuid=cache['uuid']))
+            print('Cache with name {name} and uuid {uuid} deleted'.format(name=cache_name, uuid=val['uuid']))
+        elif 'uuid' in kwargs:
+            cache_uuid = kwargs.get('uuid')
+            self._internal_delete('/pipelines_caches/{uuid}'.format(uuid=cache_uuid))
+            print('Cache with uuid {uuid} deleted'.format(uuid=cache_uuid))
 
     def _api_post(self, url, data=None):
         if not url.startswith('/'):
